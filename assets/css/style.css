@@ -67,3 +67,14 @@ button:hover {
     display: inline-block;
     width: 20%;
 }
+
+.info {
+    width: 600px;
+    margin: 100px auto;
+    color: white;
+    padding: 25px;
+}
+
+a {
+    color: white;
+}
