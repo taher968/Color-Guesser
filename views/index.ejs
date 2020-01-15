@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Color Guesser</title>
+    <style>
+        body {
+    background-color: #232323;
+    margin: 0;
+    font-family: "Montserrat","Avenir";
+}
+h1 {
+    text-align: center;
+    color: white;
+    background-color: steelblue;
+    margin: 0;
+    font-weight: normal;
+    text-transform: uppercase;
+    line-height: 1.1;
+    padding: 20px 0;
+}
+
+.selected {
+    background: steelblue;
+    color: white;
+}
+
+.square {
+    width: 30%;
+    background: purple;
+    padding-bottom: 30%;
+    float: left;
+    margin: 1.6%;
+    border-radius: 15%;
+    transition: background 0.5s;
+    -webkit-transition: background 0.5s;
+    -moz-transition: background 0.5s;
+}
+.container {
+    margin: 20px auto;
+    max-width: 600px;
+}
+
+.stripe {
+    padding: auto;
+    height: 30px;
+    background: white;
+    text-align: center;
+}
+#color-display {
+    font-size: 200%;
+}
+
+button {
+    border: none;
+    background: none;
+    text-transform: uppercase;
+    height: 100%;
+    font-weight: 700;
+    color: steelblue;
+    letter-spacing: 1px;
+    font-size: inherit;
+    transition: all 0.5s;
+    -webkit-transition: all 0.5s;
+    -moz-transition: all 0.5s;
+    outline: none;
+}
+button:hover {
+    background: steelblue;
+    color:white;
+}
+.message {
+    display: inline-block;
+    width: 20%;
+}
+
+.info {
+    width: 600px;
+    margin: 100px auto;
+    color: white;
+    padding: 25px;
+}
+
+a {
+    color: white;
+}
+    </style>
+</head>
+<body>
+    <h1>The Great <br><span id="color-display">RGB</span><br> Guessing Game</h1>
+    <div class="stripe">
+        <button class="new-colors">New Colors</button>
+        <span class="message"></span>
+        <button class="easy">Easy</button>
+        <button class="hard selected">Hard</button>
+    </div>
+    <div class="container">
+        <div class="square"></div>
+        <div class="square"></div>
+        <div class="square"></div>
+        <div class="square"></div>
+        <div class="square"></div>
+        <div class="square"></div>
+    </div>
+    <div class ="info">
+        For more information visit - <a href="https://en.wikipedia.org/wiki/RGB_color_model" target="_blank">https://en.wikipedia.org/wiki/RGB_color_model</a>
+    </div>
+   
+    
+
+    <script>
+        var colors = generateRandomColors(6);
+
+var squares = document.querySelectorAll(".square");
+var pickedColor = pickColor();
+var message = document.querySelector(".message");
+var h1 = document.querySelector("h1");
+var colorButton = document.querySelector(".new-colors");
+var easy = document.querySelector(".easy");
+var hard = document.querySelector(".hard");
+var numSquares = 6;
+
+easy.addEventListener("click",function() {
+    easy.classList.toggle("selected");
+    hard.classList.toggle("selected");
+    numSquares = 3;
+    reset();
+    colorDisplay.textContent = pickedColor;
+    for(var i = 3; i < squares.length; i++) {
+        squares[i].style.display = "none";
+    }
+    for(var i = 0; i < squares.length; i++) {
+        squares[i].style.backgroundColor = colors[i];
+    }
+});
+
+hard.addEventListener("click",function() {
+    easy.classList.toggle("selected");
+    hard.classList.toggle("selected");
+    numSquares = 6;
+    reset();
+    for(var i = 0; i < squares.length; i++) {
+        squares[i].style.backgroundColor = colors[i];
+        squares[i].style.display = "block";
+    }
+})
+
+var colorDisplay = document.querySelector("#color-display");
+colorDisplay.textContent = pickedColor;
+
+for(var i = 0; i < squares.length; i++) {
+    squares[i].style.backgroundColor = colors[i];
+
+    squares[i].addEventListener("click",function() {
+        var clickedColor = this.style.backgroundColor;
+        if(clickedColor == pickedColor) {
+            message.textContent = "Correct";
+            changeColor(pickedColor);
+            h1.style.backgroundColor = pickedColor;
+            colorButton.textContent = "Play Again?"
+        }
+        else {
+            this.style.backgroundColor = "#232323";
+            message.textContent = "Try again!";
+        }
+    })
+}
+
+function changeColor(color) {
+    for(var i = 0; i < squares.length; i++) {
+        squares[i].style.backgroundColor = color;
+    }
+}
+
+function pickColor() {
+    var random = Math.floor(Math.random() * colors.length);
+    return colors[random];
+}
+
+function generateRandomColors(num) {
+    var arr = [];
+    for(var i = 0; i < num; i++) {
+        arr[i] = randomColor();
+    }
+    return arr;
+}
+
+function randomColor() {
+    var r = Math.floor(Math.random() * 256);
+    var g = Math.floor(Math.random() * 256);
+    var b = Math.floor(Math.random() * 256);
+    return "rgb(" + r + ", " + g + ", " + b + ")";
+}
+
+function reset() {
+    message.textContent = "";
+    colorButton.textContent = "new colors";
+    colors = generateRandomColors(numSquares);
+    pickedColor = pickColor();
+    colorDisplay.textContent = pickedColor;
+    for(var i = 0; i < squares.length; i++) {
+        squares[i].style.backgroundColor = colors[i];
+    }
+    h1.style.backgroundColor = "steelblue";
+
+}
+
+colorButton.addEventListener("click",function() {
+    reset();
+})
+    </script>
+</body>
+</html>
